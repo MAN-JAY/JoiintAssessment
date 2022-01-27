@@ -12,4 +12,6 @@ defmodule Assessment.Constants do
     :error_input_e2,
     "Invalid input, provide input in form of '<platoon_name>#<no_of_platoons' 5 platoons each side"
   )
+
+  const(:error_no_win, "There is no chance of winning")
 end
