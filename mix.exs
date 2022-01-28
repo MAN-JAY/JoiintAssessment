@@ -7,7 +7,11 @@ defmodule Assessment.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
+      test_coverage: [tool: ExCoveralls],
       escript: [main_module: Assessment],
+      preferred_cli_env: [
+        coveralls: :test
+      ],
       deps: deps()
     ]
   end
@@ -22,7 +26,8 @@ defmodule Assessment.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:excoveralls, "~> 0.14.4"}
     ]
   end
 end
