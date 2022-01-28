@@ -1,7 +1,7 @@
 defmodule Assessment.Exercise2.Battle do
   defstruct my_troop: nil, opp_troop: nil, result: nil
 
-  def get_troop(my_troop, opp_troop), do: %__MODULE__{my_troop: my_troop, opp_troop: opp_troop}
+  def get_battle(my_troop, opp_troop), do: %__MODULE__{my_troop: my_troop, opp_troop: opp_troop}
 
   def get_result(advantage_map, battle) do
     adv_platoon = Map.get(advantage_map, battle.my_troop.platoon)
