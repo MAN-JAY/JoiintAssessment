@@ -8,21 +8,20 @@ defmodule Assessment.Exercise2 do
     
     IO.write("\nEnter the input: \n")
 
-    case read_input() do
+    case read_input(IO.stream(:stdio, :line) |> Stream.take_while(&(&1 != "\n")) |> Enum.take(2)) do
       {:ok, input} ->
         IO.write("Read successful\n")
-        
+
       {:error, msg} ->
         IO.write(msg)
     end
   end
 
-  def read_input() do
-
-    case IO.stream(:stdio, :line) |> Stream.take_while(&(&1 != "\n")) |> Enum.take(2) do
+  def read_input(raw_input) do
+    case raw_input do
       [my_troop_raw, opp_troop_raw] ->
-        my_troops = parse_troops(my_troop_raw)
-        opp_troops = parse_troops(opp_troop_raw)
+        my_troops = Troop.parse_troops(my_troop_raw)
+        opp_troops = Troop.parse_troops(opp_troop_raw)
 
         if my_troops == :error && opp_troops == :error,
           do: {:error, error_input_e2()},
@@ -34,20 +33,6 @@ defmodule Assessment.Exercise2 do
   end
 
   def get_advantage_map(path), do: File.read!(path) |> Poison.decode!()
-
-  defp parse_troops(input) do
-    output =
-      input
-      |> String.split(["; "], trim: true)
-      |> Enum.map(fn troop ->
-        case String.split(troop, ["#"], trim: true) do
-          [platoon, units] -> Troop.get_troop(platoon, units)
-          _ -> :error
-        end
-      end)
-
-    if length(output) == 5 && !Enum.member?(output, :error), do: output, else: :error
-  end
 
   defp exercise2_frame(advantage_map) do
     Assessment.Utils.frame()

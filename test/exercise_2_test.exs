@@ -21,9 +21,8 @@ defmodule Exercise2Test do
   describe "parse cli input" do
     setup do
       [
-        cli_input:
-          "spearmen()#10; militia()#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n" <>
-            "militia()#10; spearmen()#10; FootArcher#1000; LightCavalry#120; CavalryArcher#100",
+        cli_input: ["Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n",
+            "Militia#10; Spearmen#10; FootArcher#1000; LightCavalry#120; CavalryArcher#100"],
         input_troop: %{
           my_troops: [
             %Troop{platoon: spearmen(), units: 10},
@@ -44,15 +43,11 @@ defmodule Exercise2Test do
     end
 
     test "read input and convert to map", fixture do
-      assert capture_io([fixture.cli_input, capture_prompt: true], fn ->
-               Exercise2.read_input()
-             end) == {:ok, fixture.input_troop}
+      assert Exercise2.read_input(fixture.cli_input) == {:ok, fixture.input_troop}
     end
 
     test "invalid input" do
-      assert capture_io(["Error String"], fn ->
-               Exercise2.read_input()
-             end) == {:error, error_input_e2()}
+      assert Exercise2.read_input("Error String") == {:error, error_input_e2()}
     end
   end
 
