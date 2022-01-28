@@ -28,9 +28,9 @@ defmodule Assessment.Exercise2.Sequence do
   end
 
   def pick_best_sequence(seq_list) do
-    best_seq = seq_list
-    |> Enum.sort_by(&(&1.win_percent), :desc)
-    |> hd()
+    best_seq =
+      seq_list
+      |> Enum.max_by(& &1.win_percent)
 
     if best_seq.win_percent > 60, do: {:ok, best_seq}, else: {:error, Constants.error_no_win()}
   end

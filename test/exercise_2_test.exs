@@ -206,7 +206,8 @@ defmodule Exercise2Test do
             ],
             win_percent: 0.00
           }
-        ]
+        ],
+        cli_output: "Militia#10; Spearmen#15"
       ]
     end
 
@@ -216,11 +217,18 @@ defmodule Exercise2Test do
     end
 
     test "find the best sequence possible success scenario", fixture do
-      assert Sequence.pick_best_sequence(fixture.sequences) == {:ok, fixture.sequences |> List.last()}
+      assert Sequence.pick_best_sequence(fixture.sequences) ==
+               {:ok, fixture.sequences |> List.last()}
     end
 
     test "find the best sequence possible failure scenario", fixture do
       assert Sequence.pick_best_sequence(fixture.sequences_fail) == {:error, error_no_win()}
+    end
+
+    test "format output", fixture do
+      assert capture_io(fn ->
+               Exercise2.dsplay_output(List.last(fixture.sequences), fixture.opp_troops)
+             end) == fixture.cli_output
     end
   end
 end
