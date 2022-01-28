@@ -10,7 +10,7 @@ defmodule Assessment.Utils do
       IO.ANSI.clear(),
       IO.ANSI.cursor(1, 1),
       Assessment.Constants.joiint_banner(),
-      '\n',
+      "\n",
       "Assessment | Joiint\n"
     ]
     |> Enum.join()

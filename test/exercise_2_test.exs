@@ -231,4 +231,51 @@ defmodule Exercise2Test do
              end) == fixture.cli_output
     end
   end
+
+  describe "end to end scenarios" do
+    setup do
+      [
+        output_template: [
+          "\n",
+          "Output:",
+          "\n",
+        ],
+        scenario1_input: [
+          "Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n",
+          "Militia#10; Spearmen#10; FootArcher#1000; LightCavalry#120; CavalryArcher#100"
+        ],
+        scenario1_output: [
+          "Militia#30; FootArcher#20; Spearmen#10; LightCavalry#1000; HeavyCavalry#120"
+        ],
+        scenario2_input: [
+          "Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000\n",
+          "Militia#10; Spearmen#10; FootArcher#1000; LightCavalry#120"
+        ],
+        scenario3_input: [
+          "Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n",
+          "Militia#1000; Spearmen#1000; FootArcher#1000; LightCavalry#1200; CavalryArcher#1000"
+        ]
+      ]
+    end
+
+    test "test scenario 1 | success", fixture do
+      assert capture_io(fn ->
+               Exercise2.solve_exercise_2(fixture.scenario1_input, @advantage_map)
+             end) == fixture.output_template ++ fixture.scenario1_output |> Enum.join()
+    end
+
+    test "test scenario 2 | invalid input", fixture do
+      assert capture_io(fn ->
+               Exercise2.solve_exercise_2(fixture.scenario2_input, @advantage_map)
+             end) == error_input_e2()
+
+    end
+
+    test "test scenario 2 | impossible to win", fixture do
+      assert capture_io(fn ->
+               Exercise2.solve_exercise_2(fixture.scenario3_input, @advantage_map)
+             end) == error_no_win()
+
+    end
+  end
 end

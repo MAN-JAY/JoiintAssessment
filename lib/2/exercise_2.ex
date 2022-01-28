@@ -8,7 +8,14 @@ defmodule Assessment.Exercise2 do
 
     IO.write("\nEnter the input: \n")
 
-    case read_input(IO.stream(:stdio, :line) |> Stream.take_while(&(&1 != "\n")) |> Enum.take(2)) do
+    IO.stream(:stdio, :line) |> Stream.take_while(&(&1 != "\n")) |> Enum.take(2)
+    |> solve_exercise_2(advantage_map)
+
+    IO.write("\n\nApplication Closed")
+  end
+
+  def solve_exercise_2(raw_input, advantage_map) do
+    case read_input(raw_input) do
       {:ok, input} ->
         output =
           Sequence.get_all_sequences(input.my_troops, input.opp_troops, advantage_map)
@@ -18,7 +25,6 @@ defmodule Assessment.Exercise2 do
           {:ok, output} ->
             IO.write("\nOutput:\n")
             dsplay_output(output, input.opp_troops)
-            IO.write("\n")
 
           {:error, msg} ->
             IO.write(msg)
