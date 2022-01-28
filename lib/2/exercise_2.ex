@@ -5,7 +5,7 @@ defmodule Assessment.Exercise2 do
   def init(path) do
     advantage_map = get_advantage_map(path)
     exercise2_frame(advantage_map |> Poison.encode!())
-    
+
     IO.write("\nEnter the input: \n")
 
     case read_input(IO.stream(:stdio, :line) |> Stream.take_while(&(&1 != "\n")) |> Enum.take(2)) do

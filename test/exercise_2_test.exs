@@ -21,8 +21,10 @@ defmodule Exercise2Test do
   describe "parse cli input" do
     setup do
       [
-        cli_input: ["Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n",
-            "Militia#10; Spearmen#10; FootArcher#1000; LightCavalry#120; CavalryArcher#100"],
+        cli_input: [
+          "Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n",
+          "Militia#10; Spearmen#10; FootArcher#1000; LightCavalry#120; CavalryArcher#100"
+        ],
         input_troop: %{
           my_troops: [
             %Troop{platoon: spearmen(), units: 10},
@@ -66,34 +68,43 @@ defmodule Exercise2Test do
     end
 
     test "battle draw without advantage", fixture do
-      assert Battle.get_result(@advantage_map, fixture.battle1) == fixture.battle1 |> Map.put(:result, :draw)
+      assert Battle.get_result(fixture.battle1, @advantage_map) ==
+               fixture.battle1 |> Map.put(:result, :draw)
     end
 
     test "battle lost without advantage", fixture do
-      battle1 = fixture.battle1 |> Map.put(:opp_troop, Map.put(fixture.battle1.opp_troop, :units, 101))
-      assert Battle.get_result(@advantage_map, battle1) == battle1 |> Map.put(:result, :lost)
+      battle1 =
+        fixture.battle1 |> Map.put(:opp_troop, Map.put(fixture.battle1.opp_troop, :units, 101))
+
+      assert Battle.get_result(battle1, @advantage_map) == battle1 |> Map.put(:result, :lost)
     end
 
     test "battle won without advantage", fixture do
-      battle1 = fixture.battle1 |> Map.put(:opp_troop, Map.put(fixture.battle1.opp_troop, :units, 99))
-      assert Battle.get_result(@advantage_map, battle1) == battle1 |> Map.put(:result, :won)
+      battle1 =
+        fixture.battle1 |> Map.put(:opp_troop, Map.put(fixture.battle1.opp_troop, :units, 99))
+
+      assert Battle.get_result(battle1, @advantage_map) == battle1 |> Map.put(:result, :won)
     end
 
     test "battle draw with advantage", fixture do
-      assert Battle.get_result(@advantage_map, fixture.battle2) == fixture.battle2 |> Map.put(:result, :draw)
+      assert Battle.get_result(fixture.battle2, @advantage_map) ==
+               fixture.battle2 |> Map.put(:result, :draw)
     end
 
     test "battle lost with advantage", fixture do
-      battle2 = fixture.battle2 |> Map.put(:opp_troop, Map.put(fixture.battle2.opp_troop, :units, 201))
-      assert Battle.get_result(@advantage_map, battle2) == battle2 |> Map.put(:result, :lost)
+      battle2 =
+        fixture.battle2 |> Map.put(:opp_troop, Map.put(fixture.battle2.opp_troop, :units, 201))
+
+      assert Battle.get_result(battle2, @advantage_map) == battle2 |> Map.put(:result, :lost)
     end
 
     test "battle won with advantage", fixture do
-      battle2 = fixture.battle2 |> Map.put(:opp_troop, Map.put(fixture.battle2.opp_troop, :units, 199))
-      assert Battle.get_result(@advantage_map, battle2) == battle2 |> Map.put(:result, :won)
+      battle2 =
+        fixture.battle2 |> Map.put(:opp_troop, Map.put(fixture.battle2.opp_troop, :units, 199))
+
+      assert Battle.get_result(battle2, @advantage_map) == battle2 |> Map.put(:result, :won)
     end
   end
-
 
   describe "Calculate win percentage for a sequence" do
     setup do
@@ -137,31 +148,31 @@ defmodule Exercise2Test do
             battles: [
               %Battle{
                 my_troop: %Troop{platoon: spearmen(), units: 15},
-                opp_troop: %Troop{platoon: militia(), units: 14},
-                result: :won
-              },
-              %Battle{
-                my_troop: %Troop{platoon: militia(), units: 10},
                 opp_troop: %Troop{platoon: spearmen(), units: 15},
-                result: :won
-              }
-            ],
-            win_percent: 100
-          },
-          %Sequence{
-            battles: [
+                result: :draw
+              },
               %Battle{
                 my_troop: %Troop{platoon: militia(), units: 10},
                 opp_troop: %Troop{platoon: militia(), units: 14},
                 result: :lost
-              },
-              %Battle{
-                my_troop: %Troop{platoon: spearmen(), units: 15},
-                opp_troop: %Troop{platoon: spearmen(), units: 15},
-                result: :draw
               }
             ],
-            win_percent: 0
+            win_percent: 0.00
+          },
+          %Sequence{
+            battles: [
+              %Battle{
+                my_troop: %Troop{platoon: spearmen(), units: 15},
+                opp_troop: %Troop{platoon: militia(), units: 14},
+                result: :won
+              },
+              %Battle{
+                my_troop: %Troop{platoon: militia(), units: 10},
+                opp_troop: %Troop{platoon: spearmen(), units: 15},
+                result: :won
+              }
+            ],
+            win_percent: 100.00
           }
         ],
         sequences_fail: [
@@ -178,7 +189,7 @@ defmodule Exercise2Test do
                 result: :draw
               }
             ],
-            win_percent: 50
+            win_percent: 50.00
           },
           %Sequence{
             battles: [
@@ -193,24 +204,23 @@ defmodule Exercise2Test do
                 result: :lost
               }
             ],
-            win_percent: 0
+            win_percent: 0.00
           }
         ]
       ]
     end
 
     test "find all possible sequences with win percentage data matrix", fixture do
-      assert Sequence.get_all_sequences(fixture.my_troops, fixture.opp_troops) ==
+      assert Sequence.get_all_sequences(fixture.my_troops, fixture.opp_troops, @advantage_map) ==
                fixture.sequences
     end
 
     test "find the best sequence possible success scenario", fixture do
-      assert Sequence.pick_best_sequence(fixture.sequences) == {:ok, fixture.sequences |> hd()}
+      assert Sequence.pick_best_sequence(fixture.sequences) == {:ok, fixture.sequences |> List.last()}
     end
 
     test "find the best sequence possible failure scenario", fixture do
       assert Sequence.pick_best_sequence(fixture.sequences_fail) == {:error, error_no_win()}
     end
   end
-
 end

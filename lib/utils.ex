@@ -16,4 +16,12 @@ defmodule Assessment.Utils do
     |> Enum.join()
     |> IO.write()
   end
+
+  def posibilities([], _k), do: [[]]
+
+  def posibilities(_list, 0), do: [[]]
+
+  def posibilities(list, k) do
+    for head <- list, tail <- posibilities(list -- [head], k - 1), do: [head | tail]
+  end
 end

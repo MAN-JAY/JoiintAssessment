@@ -3,16 +3,18 @@ defmodule Assessment.Exercise2.Troop do
 
   def get_troop(platoon, units), do: %__MODULE__{platoon: platoon, units: units}
 
-  
   def parse_troops(input) do
     output =
       input
       |> String.split(["; ", "\n"], trim: true)
       |> Enum.map(fn troop ->
         case String.split(troop, ["#"], trim: true) do
-          [platoon, units] -> {units_int, _} = Integer.parse(units)
+          [platoon, units] ->
+            {units_int, _} = Integer.parse(units)
             get_troop(platoon, units_int)
-          _ -> :error
+
+          _ ->
+            :error
         end
       end)
 
