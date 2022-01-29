@@ -8,7 +8,9 @@ defmodule Assessment.Exercise2 do
 
     IO.write("\nEnter the input: \n")
 
-    IO.stream(:stdio, :line) |> Stream.take_while(&(&1 != "\n")) |> Enum.take(2)
+    IO.stream(:stdio, :line)
+    |> Stream.take_while(&(&1 != "\n"))
+    |> Enum.take(2)
     |> solve_exercise_2(advantage_map)
 
     IO.write("\n\nApplication Closed")

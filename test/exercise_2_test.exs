@@ -238,7 +238,7 @@ defmodule Exercise2Test do
         output_template: [
           "\n",
           "Output:",
-          "\n",
+          "\n"
         ],
         scenario1_input: [
           "Spearmen#10; Militia#30; FootArcher#20; LightCavalry#1000; HeavyCavalry#120\n",
@@ -261,21 +261,19 @@ defmodule Exercise2Test do
     test "test scenario 1 | success", fixture do
       assert capture_io(fn ->
                Exercise2.solve_exercise_2(fixture.scenario1_input, @advantage_map)
-             end) == fixture.output_template ++ fixture.scenario1_output |> Enum.join()
+             end) == (fixture.output_template ++ fixture.scenario1_output) |> Enum.join()
     end
 
     test "test scenario 2 | invalid input", fixture do
       assert capture_io(fn ->
                Exercise2.solve_exercise_2(fixture.scenario2_input, @advantage_map)
              end) == error_input_e2()
-
     end
 
     test "test scenario 2 | impossible to win", fixture do
       assert capture_io(fn ->
                Exercise2.solve_exercise_2(fixture.scenario3_input, @advantage_map)
              end) == error_no_win()
-
     end
   end
 end

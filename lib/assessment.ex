@@ -11,11 +11,11 @@ defmodule Assessment do
       |> IO.gets()
       |> String.split(["\n"], trim: true)
 
-    case selection |> Integer.parse() do
-      {1, ""} ->
+    case selection do
+      "1" ->
         Assessment.Exercise1.init()
 
-      {2, ""} ->
+      "2" ->
         Assessment.Exercise2.init(opts[:config])
 
       _ ->
